@@ -1,25 +1,32 @@
-import { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import './DataTable.css';
 
 const DataTable = ({ data }) => {
     console.log(JSON.stringify(data));
 
-    const tableData = [];
-
-    data.data.forEach((element, index) => {
-        console.log('Element', element);
-        const row = {};
-        let count = 0;
-        if (data.rowLabels) {
-            row[count] = data.rowLabels[index];
-            count++;
-        }
-        element.forEach((value, valueIndex) => {
-            row[count] = value;
-            count++;
+    // TO-DO: Implement topRightLabel option
+    const tableData = data.data.map((element, index) => {
+        const row = [data.rowLabels ? data.rowLabels[index] : ""];
+        element.forEach(value => {
+            row.push(value);
         });
-        tableData.push(row);
+        return row;
     });
+
+    const renderColumnLabels = () => {
+        if (data.columnLabels) {
+            return (
+                <thead>
+                    <tr>
+                        <th></th> {/* Empty header cell for the row labels column */}
+                        {data.columnLabels.map((label, index) => (
+                            <th key={index}>{label}</th>
+                        ))}
+                    </tr>
+                </thead>
+            );
+        }
+    };
 
     console.log('DataTable');
     console.log(tableData);
@@ -28,10 +35,11 @@ const DataTable = ({ data }) => {
         <div>
             <h1>DataTable</h1>
             <table>
+                {renderColumnLabels()}
                 <tbody>
                     {tableData.map((row, rowIndex) => (
                         <tr key={rowIndex}>
-                            {Object.values(row).map((cell, cellIndex) => (
+                            {row.map((cell, cellIndex) => (
                                 <td key={cellIndex}>{cell}</td>
                             ))}
                         </tr>

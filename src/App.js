@@ -24,6 +24,9 @@ localStorage.setItem('data', JSON.stringify(
         'Name',
         'Age',
       ],
+      config: {
+        topRightLabel: false
+      },
       data: [
         [
           'John',
