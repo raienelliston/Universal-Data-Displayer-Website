@@ -2,7 +2,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Legend } from 'recharts';
 
-// Rename later?
+const ChartWrapper = styled.div`
+    margin: 1rem;
+    width: 100%;
+`;
+
 const ExportChart = (data) => {
 
     console.log(data);
@@ -17,6 +21,7 @@ const ExportChart = (data) => {
     }
 
     return (
+        <ChartWrapper>
         <ResponsiveContainer width="100%" height={300}>
             <BarChart width={500} height={300} data={data.data.data} margin={{ top: 5, right: 30, left: 20, bottom: 5,}}>
             <XAxis dataKey={'name'} />
@@ -27,6 +32,7 @@ const ExportChart = (data) => {
             ))}
         </BarChart>
         </ResponsiveContainer>
+    </ChartWrapper>
     )
 }
 

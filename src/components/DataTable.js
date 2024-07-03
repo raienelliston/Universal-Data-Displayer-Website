@@ -1,5 +1,11 @@
 import React from 'react';
 import './DataTable.css';
+import styled from 'styled-components';
+
+const TableWrapper = styled.div`
+    margin: 1rem;
+    width: fit-content;
+`;
 
 const DataTable = ({ data }) => {
     console.log(JSON.stringify(data));
@@ -18,7 +24,7 @@ const DataTable = ({ data }) => {
             return (
                 <thead>
                     <tr>
-                        <th></th> {/* Empty header cell for the row labels column */}
+                        <th></th>
                         {data.columnLabels.map((label, index) => (
                             <th key={index}>{label}</th>
                         ))}
@@ -28,11 +34,8 @@ const DataTable = ({ data }) => {
         }
     };
 
-    console.log('DataTable');
-    console.log(tableData);
-
     return (
-        <div>
+        <TableWrapper>
             <h1>{data.title}</h1>
             <table>
                 {renderColumnLabels()}
@@ -48,7 +51,7 @@ const DataTable = ({ data }) => {
                     ))}
                 </tbody>
             </table>
-        </div>
+        </TableWrapper>
     );
 };
 
