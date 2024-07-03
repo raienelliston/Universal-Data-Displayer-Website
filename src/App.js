@@ -1,5 +1,5 @@
 import DataTable from './components/DataTable';
-import Chart from './components/Chart';
+import Chart from './components/BarChart';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import './App.css';
@@ -15,6 +15,59 @@ const HeaderWrapper = styled.div`
 localStorage.setItem('data', JSON.stringify(
   [
     {
+      key: '1',
+      title: 'People',
+      type: 'table',
+      columnLabels: [
+        'Name',
+        'Age',
+      ],
+      rowLabels: [
+        'Name',
+        'Age',
+      ],
+      config: {
+        topRightLabel: false
+      },
+      data: [
+        [
+          'John',
+          25
+        ],
+        [
+          'Jane',
+          30
+        ]
+      ]
+    },
+    {
+      key: '2',
+      title: 'Ages of People',
+      type: 'barChart',
+      config: {
+        type: 'bar',
+        xLabel: 'Name',
+        yLabel: 'Age',
+        title: 'Ages of People',
+        colors: [
+          'blue',
+          'red'
+        ]
+      },
+      data: [
+        {
+          x: 'John',
+          y: 25
+        },
+        {
+          x: 'Jane',
+          y: 30
+        }
+      ]
+    },
+    {
+      key: '3',
+      title: 'People',
       type: 'table',
       columnLabels: [
         'Name',
@@ -92,7 +145,7 @@ function App() {
       case 'table':
         console.log('DataTable');
         return <DataTable data={data} />;
-      case 'chart':
+      case 'barChart':
         return <Chart data={data} />;
       default:
         return null;

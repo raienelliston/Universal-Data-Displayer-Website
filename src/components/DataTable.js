@@ -33,7 +33,7 @@ const DataTable = ({ data }) => {
 
     return (
         <div>
-            <h1>DataTable</h1>
+            <h1>{data.title}</h1>
             <table>
                 {renderColumnLabels()}
                 <tbody>
