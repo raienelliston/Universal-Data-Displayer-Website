@@ -16,22 +16,23 @@ localStorage.setItem('data', JSON.stringify(
   [
     {
       type: 'table',
+      columnLabels: [
+        'Name',
+        'Age',
+      ],
+      rowLabels: [
+        'Name',
+        'Age',
+      ],
       data: [
-        {
-          name: 'John Doe',
-          age: 30,
-          email: ''
-        },
-        {
-          name: 'Jane Doe',
-          age: 25,
-          email: ''
-        },
-        {
-          name: 'John Smith',
-          age: 40,
-          email: ''
-        }
+        [
+          'John',
+          25
+        ],
+        [
+          'Jane',
+          30
+        ]
       ]
     }
   ]
@@ -87,9 +88,9 @@ function App() {
     switch (data.type) {
       case 'table':
         console.log('DataTable');
-        return <DataTable data={data.data} />;
+        return <DataTable data={data} />;
       case 'chart':
-        return <Chart data={data.data} />;
+        return <Chart data={data} />;
       default:
         return null;
     }
