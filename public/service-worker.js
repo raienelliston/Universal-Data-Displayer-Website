@@ -1,11 +1,8 @@
 const CACHE_NAME = 'my-cache-v1';
 const urlsToCache = [
   '/index.html',
-  '/assets/styles.css',
-  '/assets/script.js',
 ];
 
-// Essentially initializing the service worker
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -19,45 +16,58 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-    event.respondWith(
-      caches.match(event.request)
-        .then(function(response) {
-          // Cache hit - return response
-          if (response) {
-            return response;
-          }
-  
-          // Fetch and cache new content
-          return fetch(event.request)
-            .then(function(response) {
-              // Check if we received a valid response
-              if (!response || response.status !== 200 || response.type !== 'basic') {
-                return response;
-              }
-  
-              var responseToCache = response.clone();
-  
-              caches.open(CACHE_NAME)
-                .then(function(cache) {
-                  cache.put(event.request, responseToCache);
-                });
-  
+  event.respondWith(
+    caches.open(CACHE_NAME)
+      .then(function(cache) {
+        return cache.match(event.request)
+          .then(function(response) {
+            // Return response from cache if found
+            if (response) {
               return response;
-            });
-        })
-    );
-  });
-  
+            }
 
-self.addEventListener('activate', function(event) {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then(function(keyList) {
-      return Promise.all(keyList.map(function(key) {
-        if (cacheWhitelist.indexOf(key) === -1) {
-          return caches.delete(key);
-        }
-      }));
-    })
+            // Clone the request as it can only be consumed once
+            const fetchRequest = event.request.clone();
+
+            return fetch(fetchRequest)
+              .then(function(networkResponse) {
+                // Check if we received a valid response
+                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                  return networkResponse; // Return original response which may be undefined
+                }
+
+                // Clone the response as it can only be consumed once
+                var responseToCache = networkResponse.clone();
+
+                caches.open(CACHE_NAME)
+                  .then(function(cache) {
+                    cache.put(event.request, responseToCache);
+                  });
+
+                return networkResponse;
+              })
+              .catch(function(error) {
+                // Handle fetch errors gracefully
+                console.error('Fetch failed:', error);
+                throw error;
+              });
+          });
+      })
   );
 });
+
+// self.addEventListener('activate', function(event) {
+//   const cacheWhitelist = [CACHE_NAME];
+
+//   event.waitUntil(
+//     caches.keys().then(function(keyList) {
+//       return Promise.all(keyList.map(function(key) {
+//         if (cacheWhitelist.indexOf(key) === -1) {
+//           return caches.delete(key); // Delete old caches not in whitelist
+//         }
+//       }));
+//     })
+//   );
+
+//   self.clients.claim();
+// });

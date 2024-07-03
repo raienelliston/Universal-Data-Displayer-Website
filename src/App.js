@@ -15,25 +15,25 @@ function App() {
 
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const currentUrl = window.location.origin;
-    const dataUrl = `${currentUrl}/path/to/large-data.json`;
-    console.log('Data URL:', dataUrl);
-    fetch(dataUrl
-    ).then(response => response.json()
-    ).then(data => {
-      setData(data);
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(registration => {
-          caches.open('my-cache-v1').then(cache => {
-            cache.put(dataUrl, new Response(JSON.stringify(data)));
-          })
-        })
-      }
-  }
-  ).catch(error => {
-    console.error('Error fetching data:', error)
-  })}, [data]);
+  // useEffect(() => {
+  //   const currentUrl = window.location.origin;
+  //   const dataUrl = `${currentUrl}/path/to/large-data.json`;
+  //   console.log('Data URL:', dataUrl);
+  //   fetch(dataUrl
+  //   ).then(response => response.json()
+  //   ).then(data => {
+  //     setData(data);
+  //     if ('serviceWorker' in navigator) {
+  //       navigator.serviceWorker.ready.then(registration => {
+  //         caches.open('my-cache-v1').then(cache => {
+  //           cache.put(dataUrl, new Response(JSON.stringify(data)));
+  //         })
+  //       })
+  //     }
+  // }
+  // ).catch(error => {
+  //   console.error('Error fetching data:', error)
+  // })}, [data]);
 
   const Header = () => {
 
@@ -65,7 +65,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      addddd
+      adasdfsdfafasdfasdfasfasffddd
     </div>
   );
 }
