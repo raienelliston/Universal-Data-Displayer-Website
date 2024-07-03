@@ -1,6 +1,5 @@
 const CACHE_NAME = 'my-cache-v1';
 const urlsToCache = [
-  '/',
   '/index.html',
   '/assets/styles.css',
   '/assets/script.js',
@@ -15,34 +14,40 @@ self.addEventListener('install', function(event) {
         return cache.addAll(urlsToCache);
       })
   );
+
+  self.skipWaiting();
 });
 
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request)
-      .then(function(response) {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request).then(function(response) {
-          // Check if we received a valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
+    event.respondWith(
+      caches.match(event.request)
+        .then(function(response) {
+          // Cache hit - return response
+          if (response) {
             return response;
           }
-
-          // Clone the response, DO NOT DELETE THIS LINE
-          var responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(function(cache) {
-              cache.put(event.request, responseToCache);
+  
+          // Fetch and cache new content
+          return fetch(event.request)
+            .then(function(response) {
+              // Check if we received a valid response
+              if (!response || response.status !== 200 || response.type !== 'basic') {
+                return response;
+              }
+  
+              var responseToCache = response.clone();
+  
+              caches.open(CACHE_NAME)
+                .then(function(cache) {
+                  cache.put(event.request, responseToCache);
+                });
+  
+              return response;
             });
-
-          return response;
-        });
-      })
-  );
-});
+        })
+    );
+  });
+  
 
 self.addEventListener('activate', function(event) {
   const cacheWhitelist = [CACHE_NAME];
