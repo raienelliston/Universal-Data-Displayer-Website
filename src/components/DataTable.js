@@ -40,7 +40,9 @@ const DataTable = ({ data }) => {
                     {tableData.map((row, rowIndex) => (
                         <tr key={rowIndex}>
                             {row.map((cell, cellIndex) => (
-                                <td key={cellIndex}>{cell}</td>
+                                <td key={cellIndex} style={cell.style}>
+                                    {cell.value ? <span>{cell.value}</span> : cell}
+                                </td>
                             ))}
                         </tr>
                     ))}

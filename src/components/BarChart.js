@@ -1,31 +1,31 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Legend } from 'recharts';
 
 // Rename later?
 const ExportChart = (data) => {
 
-    
+    console.log(data);
 
-
-
-
-
-
-
-
-
-
-
-
+    const CheckLegend = () => {
+        if (data.data.config.legend) {
+            return (
+                <Legend width={180} wrapperStyle={{ top: 40, right: 20, backgroundColor: '#f5f5f5', border: '1px solid #d5d5d5', borderRadius: 3, lineHeight: '40px' }}/>
+            );
+        }
+        return null;
+    }
 
     return (
         <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
-                <XAxis dataKey={data.config.xLabel} />
-                <YAxis dataKey={data.config.yLabel} />
-                <Bar dataKey="y" fill="#8884d8" />
-            </BarChart>
+            <BarChart width={500} height={300} data={data.data.data} margin={{ top: 5, right: 30, left: 20, bottom: 5,}}>
+            <XAxis dataKey={'name'} />
+            <YAxis />
+            <Legend />
+            {data.data.config.dataKeys.map((type, index) => (
+                <Bar key={index} dataKey={type.name} fill={type.color} />
+            ))}
+        </BarChart>
         </ResponsiveContainer>
     )
 }
